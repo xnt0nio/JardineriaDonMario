@@ -1,0 +1,95 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block css %}
+
+{% endblock %}
+{% block contenido %}
+<section class="p-4 p-md-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-5">
+            <div class="card rounded-3">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <h3>Agrega un metodo de pago</h3>
+
+                    </div>
+                    <form method="post" action="{% url 'pago' %}">
+                        {% csrf_token %}
+                        <p class="fw-bold mb-4 pb-2">Registrar tarjeta</p>
+
+                        <div class="d-flex flex-row align-items-center mb-4 pb-1">
+                            <img class="img-fluid" src="https://img.icons8.com/color/48/000000/mastercard-logo.png" />
+                            <div class="flex-fill mx-3">
+                                <div class="form-outline">
+                                    <h6>Mastercard</h6>
+                                    <input type="text" id="formControlLgXc" class="form-control form-control-lg"  placeholder="Ingrese número de la tarjeta"/>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                        <div class="d-flex flex-row align-items-center mb-4 pb-1">
+                            <img class="img-fluid" src="https://img.icons8.com/color/48/000000/visa.png" />
+                            <div class="flex-fill mx-3">
+                                <div class="form-outline">
+                                    <h6>Visa</h6>
+                                    <input type="text" id="formControlLgXs" class="form-control form-control-lg" placeholder="Ingrese número de la tarjeta" />
+                      
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                 
+
+                        <div class="form-outline mb-4">
+                            <h6>Nombre del titular</h6>
+                            <input type="text" id="formControlLgXsd" class="form-control form-control-lg"
+                            placeholder="Nombre" />
+                            <label class="form-label" for="formControlLgXsd"></label>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-7">
+                                <div class="form-outline">
+                                    <h6>Número de la tarjeta</h6>
+                                    <div class="form-outline">
+                                      
+                                        <input type="text" id="formControlLgXc" class="form-control form-control-lg"  placeholder="Ingrese número de la tarjeta"/>
+                                    </div>
+                              
+                                    
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-outline">
+                                    <h6>Expira</h6>
+                                    <input type="password" id="formControlLgExpk" class="form-control form-control-lg"
+                                        placeholder="MM/YYYY" />
+                                  
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-outline">
+                                    <h6>CVV</h6>
+                                    <input type="password" id="formControlLgcvv" class="form-control form-control-lg"
+                                        placeholder="Cvv" />
+                       
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-lg btn-block" style="background-color: #7fad39; color: white; padding: 4px 8px; border-radius: 4px;">Confirmar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block js %}
+
+
+{% endblock %}
