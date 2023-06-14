@@ -1,0 +1,203 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock %}
+{% block contenido %}
+
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="{% static 'core/img/jardiiiiiiin.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>productos</h2>
+                        <div class="breadcrumb__option">
+                            <a href="{% url 'index' %}">inicio</a>
+                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Product Section Begin -->
+    <section class="product spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-5">
+                    <div class="sidebar">
+                        <div class="sidebar__item">
+                            <h4>Categorias</h4>
+                            <ul>
+                                <li><a href="#">Flores</a></li>
+                                <li><a href="#">Maceteros</a></li>
+                                <li><a href="#">Tierra</a></li>
+                                <li><a href="#">Plantas</a></li>
+                         
+                            </ul>
+                        </div>
+                        <div class="sidebar__item">
+                            <h4>Precio</h4>
+                            <div class="price-range-wrap">
+                                <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
+                                    data-min="10" data-max="540">
+                                    <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
+                                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
+                                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
+                                </div>
+                                <div class="range-slider">
+                                    <div class="price-input">
+                                        <input type="text" id="minamount">
+                                        <input type="text" id="maxamount">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sidebar__item sidebar__item__color--option">
+                            <h4>colores</h4>
+                            <div class="sidebar__item__color sidebar__item__color--white">
+                                <label for="white">
+                                    blanco
+                                    <input type="radio" id="white">
+                                </label>
+                            </div>
+                            <div class="sidebar__item__color sidebar__item__color--gray">
+                                <label for="gray">
+                                    Naranja
+                                    <input type="radio" id="gray">
+                                </label>
+                            </div>
+                            <div class="sidebar__item__color sidebar__item__color--red">
+                                <label for="red">
+                                    Rojo
+                                    <input type="radio" id="red">
+                                </label>
+                            </div>
+                            <div class="sidebar__item__color sidebar__item__color--black">
+                                <label for="black">
+                                    Negro
+                                    <input type="radio" id="black">
+                                </label>
+                            </div>
+                            <div class="sidebar__item__color sidebar__item__color--blue">
+                                <label for="blue">
+                                    Azul
+                                    <input type="radio" id="blue">
+                                </label>
+                            </div>
+                            <div class="sidebar__item__color sidebar__item__color--green">
+                                <label for="green">
+                                    Verde
+                                    <input type="radio" id="green">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="sidebar__item">
+                            <h4>Tamaño</h4>
+                            <div class="sidebar__item__size">
+                                <label for="large">
+                                    Grande
+                                    <input type="radio" id="large">
+                                </label>
+                            </div>
+                            <div class="sidebar__item__size">
+                                <label for="medium">
+                                    Mediano
+                                    <input type="radio" id="medium">
+                                </label>
+                            </div>
+                            <div class="sidebar__item__size">
+                                <label for="small">
+                                    Pequeño
+                                    <input type="radio" id="small">
+                                </label>
+                            </div>
+                            <div class="sidebar__item__size">
+                                <label for="tiny">
+                                    Diminuto
+                                    <input type="radio" id="tiny">
+                                </label>
+                            </div>
+                        </div>
+                
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-2">
+                  
+                        <div class="section-title product__discount__title">
+                            <h2>productos</h2>
+                        </div>                                               
+                    <div class="filter__item">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-5">
+                                <div class="filter__sort">
+                                    <span>ordenar por:</span>
+                                    <select>
+                                        <option value="0">defecto</option>
+                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4">
+                                <div class="filter__found">
+                                    <h6><span>16</span>productos encontrados</h6>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-3">
+                                <div class="filter__option">
+                                    <span class="icon_grid-2x2"></span>
+                                    <span class="icon_ul"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Producto por base de dato ola ola-->
+                    <div class="row">
+                        {% for aux in listado  %}
+                            {% if aux.vigente == 1 %}
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="product__item">
+                                {% if aux.imagen %}
+                                <div class="product__item__pic set-bg" data-setbg="{{ aux.imagen.url }}">
+                                {% else %}    
+                                <div class="product__item__pic set-bg" data-setbg="{% static 'core/img/product/nodispo.jpg' %}">
+                                {% endif %}    
+                                    <ul class="product__item__pic__hover">
+                                        <li><a href="{% url 'shopdetails' aux.id %}"><i class="fa fa-shopping-cart"></i></a></li>
+                                        {% if user.is_authenticated and user.username == 'admin' %}
+                                        <li><a href="{% url 'update' aux.id %}"><i class="fa fa-refresh"></i></a></li>
+                                        <li><a onclick="deleteProducto({{ aux.id }})"><i class="fa fa-trash"></i></a></li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                                <div class="product__item__text">
+                                    <h6><a href="#">{{ aux.nombre }}</a></h6>
+                                    {%  if aux.stock == 0%}
+                                    
+                                    <p>Stock Disponible: producto agotado</p>
+                                    {% else %}
+                                    <p>Stock Disponible: {{ aux.stock }}</p>
+                                    <h5>${{ aux.precio }}</h5>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        
+                    </div>
+                    {% include 'core/paginator.html' %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+{% block js %}
+
+{% endblock %}

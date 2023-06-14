@@ -1,0 +1,160 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock %}
+{% block contenido %}
+
+
+
+<section class="hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="hero__categories">
+                    <div class="hero__categories__all">
+                        <i class="fa fa-bars"></i>
+                        <span>Menú de categorias</span>
+                    </div>
+                    <ul>
+                        <li><a href="#">Tierra de hojas</a></li>
+                        <li><a href="#">plantas</a></li>
+                        <li><a href="#">flores</a></li>
+                        <li><a href="#">maceteros</a></li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="hero__search">
+                    <div class="hero__search__form">
+                        <form action="#">
+
+                            <input type="text" placeholder="que necesitas?">
+                            <button type="submit" class="site-btn">buscar</button>
+                        </form>
+                    </div>
+                    <div class="hero__search__phone">
+                        <div class="hero__search__phone__icon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <div class="hero__search__phone__text">
+                            <h5>+56911111111</h5>
+                            <span>soporte las 24 hrs del dia</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero__item set-bg" data-setbg="{% static 'core/img/ja.jpg ' %}">
+                    <div class="hero__text">
+                        <span style="color: rgb(0, 0, 0);">Los mejores productos</span>
+                        <h2 style="color: rgb(0, 0, 0);">Jardineria <br />don Mario</h2>
+                        <p style="color: rgb(0, 0, 0);">Los mas confiables de tu pobla</p>
+                        <a href="{% url 'shopgrid' %}" class="primary-btn">Comprar ahora</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Hero Section End -->
+
+<!-- Categories Section Begin -->
+<section class="categories">
+    <div class="container">
+        <div class="row">
+            <div class="categories__slider owl-carousel">
+                {% for aux in listaProductos %}
+                {% if aux.vigente == 1 %}
+                <div class="col-lg-3">
+                    {% if aux.imagen %}
+                    <div class="categories__item set-bg" data-setbg="{{ aux.imagen.url }}">
+                        <h5><a href="#">{{ aux.nombre }}</a></h5>
+                    </div>
+                    {% else %}
+                    <div class="categories__item set-bg" data-setbg="{% static 'core/img/product/nodispo.jpg' %}">
+                        <h5><a href="#">{{ aux.nombre }}</a></h5>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Featured Section Begin -->
+<section class="featured spad">
+    <div class="container">
+        <div class="row">
+            
+
+
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2>Algunos productos</h2>
+                </div>
+            
+            </div>
+        </div>
+
+
+
+        <div class="row featured__filter">
+
+            {% for aux in listaProductos %}
+            {% if aux.vigente == 1 %}
+         
+            <div class="col-lg-3 col-md-4 col-sm-6 mix tierra">
+                <div class="featured__item">
+                    {% if aux.imagen %}
+                    <div class="featured__item__pic set-bg" data-setbg="{{ aux.imagen.url }}">
+                        <ul class="featured__item__pic__hover">
+                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                            <li><a href="{% url 'shopdetails' aux.id %}"><i class="fa fa-shopping-cart"></i></a></li>
+                            {% if user.is_authenticated and user.username == 'admin' %}
+                            <li><a href="{% url 'update' aux.id %}"><i class="fa fa-refresh"></i></a></li>
+                            <li><a onclick="deleteProducto({{ aux.id }})"><i class="fa fa-trash"></i></a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% else %}
+                    <div class="featured__item__pic set-bg" data-setbg="{% static 'core/img/product/nodispo.jpg' %}">
+                        <ul class="featured__item__pic__hover">
+                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                            <li><a href="{% url 'shopdetails' aux.id %}"><i class="fa fa-shopping-cart"></i></a></li>
+                            {% if user.is_authenticated and user.username == 'admin' %}
+                            <li><a href="{% url 'update' aux.id %}"><i class="fa fa-refresh"></i></a></li>
+                            <li><a onclick="deleteProducto({{ aux.id }})"><i class="fa fa-trash"></i></a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    <div class="featured__item__text">
+                        <h5>{{aux.nombre}}</h5>
+                        <h6><a href="#">${{aux.precio}}</a></h6>
+                        <p>Stock: {{ aux.stock }} </p>
+                    </div>
+                </div>
+
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+
+
+
+
+    </div>
+</section>
+
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

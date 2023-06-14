@@ -1,0 +1,295 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock %}
+
+
+{% block contenido %}
+
+
+
+
+
+<body class="bg-body-tertiary">
+  <div class="container">
+    <main>
+
+      <hr class="my-4">
+
+      <div class="row g-12">
+
+        <div class="col-md-90 col-lg-40">
+          <h4 class="mb-3">Crea tu cuenta</h4>
+          <form class="needs-validation" novalidate>
+            <div class="row g-3">
+              <div class="col-sm-6">
+                <label for="firstName" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                <div class="invalid-feedback">
+                  este campo debe ser completado
+                </div>
+              </div>
+
+              <div class="col-sm-6">
+                <label for="lastName" class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                <div class="invalid-feedback">
+                  este campo debe ser completado
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label for="username" class="form-label">Usuario</label>
+                <div class="input-group has-validation">
+                  <span class="input-group-text">:)</span>
+                  <input type="text" class="form-control" id="username" placeholder="Ingresa un nombre de usuario"
+                    required>
+                  <div class="invalid-feedback">
+                    Completa este campo
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label for="email" class="form-label">Correo <span class="text-body-secondary">(Opcional)</span></label>
+                <input type="email" class="form-control" id="email" placeholder="tucorreo@ejemplo.com">
+                <div class="invalid-feedback">
+                  Please enter a valid email address for shipping updates.
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label for="address" class="form-label">contraseña</label>
+                <input type="text" class="form-control" id="address" placeholder="Ingrese su contraseña" required>
+                <div class="invalid-feedback">
+                  Porfavor ingrese una contraseña
+                </div>
+
+              </div>
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <hr class="my-4">
+
+
+            <h6>Opcional</h6>
+            <h6>ㅤ</h6>
+            <button class="btn" style="background-color: #7fad39; color: white;" type="button" data-toggle="collapse"
+              data-target="#contenido-colapsable" aria-expanded="false" aria-controls="contenido-colapsable">
+              Suscribete aqui
+            </button>
+
+            <hr class="my-4">
+
+            <div class="collapse" id="contenido-colapsable">
+              <div class="container">
+                <!--Section: Content-->
+                <section class="text-center">
+                  <h4 class="mb-4"><strong>Suscribete</strong></h4>
+
+                  <div class="btn-group mb-4" role="group" aria-label="Basic example">
+                    <button type="button" class="btn active"
+                      style="background-color: #7fad39; color: white;">suscripción mensual</button>
+                    <button type="button" class="btn " style="background-color: #7fad39; color: white;">
+                      Suscripcion anual <small>(2 meses gratis)</small>
+                    </button>
+                  </div>
+
+                  <div class="row gx-lg-5">
+
+                    <!--Grid column-->
+                    <div class="col-lg-3 col-md-6 mb-4">
+
+                      <!-- Card -->
+                      <div class="card">
+
+                        <div class="card-header bg-white py-3">
+                          <p class="text-uppercase small mb-2"><strong>Realiza una donacion</strong></p>
+
+                        </div>
+
+                        <div class="card-body">
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item"> realiza una donación</li>
+                            <li class="list-group-item"> para suscribirte</li>
+                            <li class="list-group-item">dejanos tu correo</li>
+
+                            <li class="list-group-item">duración: 2 meses</li>
+                          </ul>
+                        </div>
+
+
+
+
+                        <div class="card-footer bg-white py-3">
+                          <button type="button" class="btn btn-sm" style="background-color: #7fad39; color: white;"
+                            data-toggle="modal" data-target="#miModal">enviar correo</button>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="miModalLabel"
+                          aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="miModalLabel">Enviar correo</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <input type="text" class="form-control" placeholder="Ingresa correo aquí">
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn " style="background-color: #7fad39; color: white;"
+                                  data-dismiss="modal">enviar</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <!--Grid column-->
+
+                    <div class="col-lg-3 col-md-6 mb-4">
+
+                      <!-- Card -->
+                      <div class="card">
+
+                        <div class="card-header bg-white py-3">
+                          <p class="text-uppercase small mb-2"><strong>básica</strong></p>
+                          <h5 class="mb-0">$2.000</h5>
+                        </div>
+
+                        <div class="card-body">
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item">suscripción </li>
+                            <li class="list-group-item">básica</li>
+                            <li class="list-group-item">duración: 1 mes</li>
+                          </ul>
+                        </div>
+
+                        <div class="card-footer bg-white py-3">
+                          <form>
+                            <button type="submit" class="btn btn-sm" formaction="{% url 'pagosub' %}"
+                              style="background-color: #7fad39; color: white;">comprar ahora</button>
+                          </form>
+                        </div>
+
+                      </div>
+                      <!-- Card -->
+
+                    </div>
+
+
+                    <!--Grid column-->
+                    <div class="col-lg-3 col-md-6 mb-4">
+
+                      <!-- Card -->
+                      <div class="card">
+
+                        <div class="card-header bg-white py-3">
+                          <p class="text-uppercase small mb-2"><strong>Estándar</strong></p>
+                          <h5 class="mb-0">$5.000</h5>
+                        </div>
+
+                        <div class="card-body">
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item">suscripción</li>
+                            <li class="list-group-item">estándar</li>
+                            <li class="list-group-item">duración: 1 mes</li>
+                          </ul>
+                        </div>
+                        <div class="card-footer bg-white py-3">
+
+                          <form>
+                            <button type="submit" class="btn btn-sm" formaction="{% url 'pagosub' %}"
+                              style="background-color: #7fad39; color: white;">comprar ahora</button>
+                          </form>
+
+
+                        </div>
+                      </div>
+                      <!-- Card -->
+                    </div>
+
+                    <!--Grid column-->
+                    <div class="col-lg-3 col-md-6 mb-4">
+                      <!-- Card -->
+                      <div class="card">
+                        <div class="card-header bg-white py-3">
+                          <p class="text-uppercase small mb-2"><strong>Premium</strong></p>
+                          <h5 class="mb-0">$8.000</h5>
+                        </div>
+                        <div class="card-body">
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item">suscripción </li>
+                            <li class="list-group-item">Premium</li>
+                            <li class="list-group-item">duración: 2 meses</li>
+
+                          </ul>
+                        </div>
+                        <div class="card-footer bg-white py-3">
+                          <form>
+                            <button type="submit" class="btn btn-sm" formaction="{% url 'pagosub' %}"
+                              style="background-color: #7fad39; color: white;">comprar ahora</button>
+                          </form>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </section>
+
+              </div>
+            </div>
+
+            <form>
+              <button type="submit" class="w-100 btn  btn-lg" formaction="{% url 'login' %}"
+                style="background-color: #7fad39; color: white;">continuar</button>
+            </form>
+
+
+
+          </form>
+          <hr class="my-4">
+        </div>
+      </div>
+    </main>
+  </div>
+
+</body>
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

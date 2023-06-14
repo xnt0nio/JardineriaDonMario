@@ -1,0 +1,120 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block contenido %}
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="{% static 'core/img/jardiiiiiiin.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>carrito de compras</h2>
+                    <div class="breadcrumb__option">
+                        <a href="{% url 'index' %}">inicio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Shoping Cart Section Begin -->
+<section class="shoping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                {% if listarproductos %}
+                <div class="shoping__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="shoping__product">productos</th>
+                                <th>producto</th>
+                                <th>cantidad</th>
+                                <th>precio</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for aux in listarproductos %}
+                            <tr>
+                                <td class="shoping__cart__item">
+                                    <img src="{{ aux.producto.imagen.url }}" width="250" height="200">
+                                </td>
+                                <td class="shoping__cart__price">
+                                    {{ aux.producto.nombre }}
+                                </td>
+                                <td class="shoping__cart__quantity">
+                                    <div class="quantity">
+                                        <div class="pro-qty">
+                                            <input type="number" value="{{ aux.cantidad_agregada }}" min="1" name="cantidad_agregada">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="shoping__cart__total">
+                                    ${{ aux.total_producto }}
+                                </td>
+                                <td class="shoping__cart__item__close">
+                                    <span class="icon_close" onclick="eliminar_producto({{ aux.id }})"></span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-danger text-center">
+                    No hay productos en el carrito.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shoping__cart__btns">
+                    <a href="{% url 'shopgrid' %}" class="primary-btn cart-btn">Continuar comprando</a>
+                    <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
+                        actualizar carrito</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="shoping__continue">
+                    <div class="shoping__discount">
+                        <h5>¿Tienes código de descuento?</h5>
+                        <form action="#">
+                            <input type="text" placeholder="Ingresa código de descuento">
+                            <button type="submit" class="site-btn">Ingresar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="shoping__checkout">
+                    <h5>Precio total</h5>
+                    <ul>
+                        <!-- <li>Subtotal <span>$454.98</span></li>-->
+                        <li>Total <span>{{ total_precio }}</span></li>
+                    </ul>
+                    {% if listarproductos %}
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'checkout' %}" class="primary-btn">Continuar</a>
+                    {% else %}
+                    <a href="#" class="primary-btn" onclick="inic()">Continuar</a>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

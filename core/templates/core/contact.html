@@ -1,0 +1,114 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock %}
+{% block contenido %}
+
+
+    <!-- Hero Section End -->
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="{% static 'core/img/breadcrumb.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Sigue tu pedido</h2>
+                        <div class="breadcrumb__option">
+                            <a href="{% url 'index' %}">salir</a>                       
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Contact Section Begin -->
+    <section class="contact spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-6 text-center">
+                    <div class="contact__widget">
+                        <span class="icon_phone"></span>
+                        <h4>Contactanos</h4>
+                        <p>+56911111111</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 text-center">
+                    <div class="contact__widget">
+                        <span class="icon_pin_alt"></span>
+                        <h4>Entrega en</h4>
+                        <p>Avenida Concha Y Toro, Av. San Carlos 1340, Puente Alto, Región Metropolitana</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 text-center">
+                    <div class="contact__widget">
+                        <span class="icon_clock_alt"></span>
+                        <h4>Fecha estimada</h4>
+                        <p>04 de abril entre 10:00 am y 23:00 pm</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 text-center">
+                    <div class="contact__widget">
+                        <span class="icon_mail_alt"></span>
+                        <h4>correo</h4>
+                        <p>Mariobros@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section End -->
+
+    <!-- Map Begin -->
+    <div class="map">
+        <iframe
+            src="https://www.google.com/maps/place/Paradero+31+Av.Concha+y+Toro/@-33.5793183,-70.5866395,17z/data=!3m1!4b1!4m15!1m8!3m7!1s0x886ca48c841038a1:0x70cfba96bf847f0!2sPlainfield,+IN,+USA!3b1!8m2!3d39.7042123!4d-86.3994387!16zL20vMHNtNzA!3m5!1s0x9662d96879332d05:0xf826a8738f820dcf!8m2!3d-33.5793184!4d-70.5817686!16s%2Fg%2F11tmn5xt48?hl=en"
+            height="500" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+        <div class="map-inside">
+            <i class="icon_pin"></i>
+            <div class="inside-widget">
+                <h4>Santiago</h4>
+                <ul>
+             
+                    <li>Tu pedido se encuentra en </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Map End -->
+
+    <!-- Contact Form Begin -->
+    <div class="contact-form spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="contact__form__title">
+                        <h2>Envianos un mensaje</h2>
+                    </div>
+                </div>
+            </div>
+            <form action="#">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <input type="text" placeholder="tu nombre">
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <input type="text" placeholder="tu correo">
+                    </div>
+                    <div class="col-lg-12 text-center">
+                        <textarea placeholder="escriba su mensaje aqui"></textarea>
+                        <button type="submit" class="site-btn">ENVIAR</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
