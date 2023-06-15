@@ -52,5 +52,7 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 
-class PurchaseMembershipForm(forms.Form):
-    membership = forms.ModelChoiceField(queryset=Membership.objects.all(), empty_label=None)
+class MembershipForm(forms.ModelForm):
+    class Meta:
+        model = Membership
+        fields = ('name', 'price')

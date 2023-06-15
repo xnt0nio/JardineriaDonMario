@@ -161,11 +161,14 @@
             </ul>
           </div>
           <div class="card-footer bg-white py-3">
+
+
             <form method="post">
               {% csrf_token %}
               {{ form.as_p }}
-              <button type="submit">Comprar suscripción</button>
+              <button type="submit">Comprar Suscripción</button>
             </form>
+
           </div>
         </div>
       </div>
@@ -174,17 +177,13 @@
   </section>
 
 
-  {% if subscription_success %}
-  <p>Tu suscripción ha sido exitosa. ¡Disfruta de los beneficios de la membresía!</p>
+  {% if subscription %}
+  <p>Estás suscrito. Fecha de vencimiento: {{ subscription.end_date }}</p>
   {% else %}
-  <p>no pudiste</p>
-  {% endif%}
+  <p>No estás suscrito.</p>
+  {% endif %}
 
 </div>
-
-
-
-
 
 
 

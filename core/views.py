@@ -8,7 +8,7 @@ from .serializers import *
 from rest_framework import viewsets
 import requests
 from django.contrib.auth import authenticate, login
-from datetime import date
+from datetime import date,timedelta
 
 
 
@@ -318,55 +318,36 @@ def registro(request):
 
 
 @login_required
-def purchase_membership(request):
-    subscription_success = False
-
+def subscribe(request):
     if request.method == 'POST':
-        form = PurchaseMembershipForm(request.POST)
+        form = MembershipForm(request.POST)
         if form.is_valid():
-            membership_id = 123  # Define el ID de la membresía manualmente
-            membership = Membership.objects.get(id=membership_id)  # Obtiene la membresía según el ID
+
+            #aqui se completa membership
+            membership_id = 1  
+            name = "basica"
+            price = 5000
+            membership = Membership(membership_id=membership_id, name=name, price=price)
+            membership.save()    
+
+            #aqui se completa subcription
             user = request.user
-
-            # Verificar si el usuario ya tiene una suscripción activa
-            if Subscription.objects.filter(user=user).exists():
-                messages.warning(request, "Ya tienes una suscripción activa.")
-                return redirect('purchase_membership')
-
-            # Calcular la fecha de finalización de la suscripción (1 mes a partir de hoy)
-            end_date = date.today().replace(day=1)
-            end_date = end_date.replace(month=(end_date.month + 1) % 12)
-            if end_date.month == 1:
-                end_date = end_date.replace(year=end_date.year + 1)
-
-            # Crear una nueva suscripción para el usuario
-            subscription = Subscription(user=user, membership=membership, end_date=end_date)
+            end_date = date.today() + timedelta(days=30)
+            subscription = Subscription(user=user, membership=membership,end_date=end_date)
             subscription.save()
-
-            # Actualizar la variable para indicar el éxito de la suscripción
-            subscription_success = True
-            messages.success(request, "¡Suscripción realizada con éxito!")
-            return redirect('index')  # Redirigir nuevamente a la página de inicio
-
+            return redirect('index')
     else:
-        form = PurchaseMembershipForm()
+        form = MembershipForm()
 
-    return render(request, 'purchase_membership.html', {'form': form, 'subscription_success': subscription_success})
-
-
+    return render(request, 'index.html', {'form': form})
 
 
 @login_required
 def cancel_subscription(request):
     user = request.user
-
-    # Verificar si el usuario tiene una suscripción activa
-    if Subscription.objects.filter(user=user).exists():
-        # Obtener la suscripción del usuario
+    try:
         subscription = Subscription.objects.get(user=user)
-
-        # Eliminar la suscripción
         subscription.delete()
-
-    # Redirigir a una página de confirmación o mostrar un mensaje de éxito
-    return redirect('subscription_cancelled')
+        return redirect('subscription_cancelled')
+    except Subscription.DoesNotExist:
+        return redirect('subscription_cancel_error')
