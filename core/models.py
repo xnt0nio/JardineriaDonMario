@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import date
 from django.contrib.auth.models import User
+from datetime import timedelta
 
 # Create your models here.
 
@@ -46,21 +47,11 @@ class Carrito(models.Model):
 
 
 
-
-class Membership(models.Model):
-    membership_id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-
-    def __str__(self):
-        return self.name
-
-
-class Subscription(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    membership = models.ForeignKey(Membership, on_delete=models.CASCADE)
-    start_date = models.DateField(auto_now_add=True)
-    end_date = models.DateField()
+class Suscripcion(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    fecha_inicio = models.DateTimeField(auto_now_add=True)
+    fecha_finalizacion = models.DateTimeField(null=True, blank=True)
+    activa = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.membership.name}"
+        return self.usuario.username

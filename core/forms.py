@@ -1,12 +1,10 @@
 # VAMOS A CREAR UN FORMULARIO QUE SE REUTILIZA EN EL AGREGAR Y ACTUALIZAR
-from datetime import date
 from django import forms
 from django.forms import ModelForm
 from .models import *
-from django.views.generic.edit import UpdateView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.forms import ValidationError
+
 
 
 
@@ -52,7 +50,9 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 
-class MembershipForm(forms.ModelForm):
+
+
+class SuscripcionForm(forms.ModelForm):
     class Meta:
-        model = Membership
-        fields = ('name', 'price')
+        model = Suscripcion
+        fields = []

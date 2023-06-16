@@ -8,7 +8,9 @@ from .serializers import *
 from rest_framework import viewsets
 import requests
 from django.contrib.auth import authenticate, login
-from datetime import date,timedelta
+from datetime import timedelta
+from django.utils import timezone
+
 
 
 
@@ -317,37 +319,19 @@ def registro(request):
 
 
 
-@login_required
-def subscribe(request):
+
+def suscripcion(request):
     if request.method == 'POST':
-        form = MembershipForm(request.POST)
+        form = SuscripcionForm(request.POST)
         if form.is_valid():
-
-            #aqui se completa membership
-            membership_id = 1  
-            name = "basica"
-            price = 5000
-            membership = Membership(membership_id=membership_id, name=name, price=price)
-            membership.save()    
-
-            #aqui se completa subcription
-            user = request.user
-            end_date = date.today() + timedelta(days=30)
-            subscription = Subscription(user=user, membership=membership,end_date=end_date)
-            subscription.save()
+            suscripcion = form.save(commit=False)
+            suscripcion.usuario = request.user
+            suscripcion.fecha_inicio = timezone.now()
+            suscripcion.fecha_finalizacion = suscripcion.fecha_inicio + timedelta(days=30)
+            suscripcion.save()
+            messages.success(request, '¡Te has suscrito correctamente!')
             return redirect('index')
     else:
-        form = MembershipForm()
+        form = SuscripcionForm()
 
-    return render(request, 'index.html', {'form': form})
-
-
-@login_required
-def cancel_subscription(request):
-    user = request.user
-    try:
-        subscription = Subscription.objects.get(user=user)
-        subscription.delete()
-        return redirect('subscription_cancelled')
-    except Subscription.DoesNotExist:
-        return redirect('subscription_cancel_error')
+    return render(request, 'core/suscripcion.html', {'form': form})
