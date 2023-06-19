@@ -56,3 +56,8 @@ class SuscripcionForm(forms.ModelForm):
     class Meta:
         model = Suscripcion
         fields = []
+
+
+
+
+

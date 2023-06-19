@@ -28,12 +28,14 @@ urlpatterns = [
     path('pagosub/', pagosub, name="pagosub"),
     path('suscripcion/', suscripcion, name="suscripcion"),
     path('main/', main, name="main"),
+
     #CRUD
     path('add/', add, name="add"),
     path('update/<id>/', update, name="update"),
     path('delete/<id>/', delete, name="delete"),
     path('eliminar_producto/<id>/', eliminar_producto, name="eliminar_producto"),
     path('vaciar_carrito/', vaciar_carrito, name='vaciar_carrito'),
+    path('cancelar_suscripcion/', cancelar_suscripcion, name='cancelar_suscripcion'),
     path('registro/', registro, name='registro'),
     
 ]

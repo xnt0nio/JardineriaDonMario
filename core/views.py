@@ -72,6 +72,9 @@ def add(request):
             #data['msj'] = "Producto guardado correctamente"
             messages.success(request, "Producto almacenado correctamente")
     return render(request, 'core/add-product.html', data)
+
+
+
 @permission_required('core.update-product')
 def update(request, id):
     producto = Producto.objects.get(id=id) # OBTIENE UN PRODUCTO POR EL ID
@@ -317,15 +320,22 @@ def registro(request):
 
 
 
-
-
-
+@login_required
 def suscripcion(request):
+    user = request.user
+    suscripcion = Suscripcion.objects.filter(usuario=user).first()
+
+    if suscripcion:      
+        suscrito = True
+    else:
+      
+        suscrito = False
+
     if request.method == 'POST':
         form = SuscripcionForm(request.POST)
         if form.is_valid():
             suscripcion = form.save(commit=False)
-            suscripcion.usuario = request.user
+            suscripcion.usuario = user
             suscripcion.fecha_inicio = timezone.now()
             suscripcion.fecha_finalizacion = suscripcion.fecha_inicio + timedelta(days=30)
             suscripcion.save()
@@ -334,4 +344,15 @@ def suscripcion(request):
     else:
         form = SuscripcionForm()
 
-    return render(request, 'core/suscripcion.html', {'form': form})
+    return render(request, 'core/suscripcion.html', {'form': form, 'suscrito': suscrito})
+
+
+@login_required
+def cancelar_suscripcion(request):
+    suscripcion = Suscripcion.objects.get(usuario=request.user)
+    suscripcion.delete()
+    messages.success(request, '¡Tu suscripción ha sido cancelada correctamente!')
+    return redirect('index')
+
+
+

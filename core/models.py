@@ -45,6 +45,8 @@ class Carrito(models.Model):
 
 
 
+
+
 class Suscripcion(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
     fecha_inicio = models.DateTimeField(auto_now_add=True)

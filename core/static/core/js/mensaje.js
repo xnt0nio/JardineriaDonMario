@@ -42,3 +42,10 @@ function eliminar_producto(id) {
       })
 }
 
+
+
+
+  
+  
+  
+  

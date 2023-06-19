@@ -53,35 +53,44 @@
                                 {% elif user.is_authenticated and user.username != 'admin' %}
                                 <li>
                                     <a href="#" style="color: black;" data-toggle="modal" data-target="#profileModal">
-                                      <i class="fa-solid fa-user"></i> {{ user.username }}
+                                        <i class="fa-solid fa-user"></i> {{ user.username }}
                                     </a>
-                                  </li>
+                                </li>
                                 {% endif %}
                                 <li>suscribete realizando una donacion</li>
                             </ul>
-                            <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="profileModal" tabindex="-1" role="dialog"
+                                aria-labelledby="profileModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title" id="profileModalLabel">Perfil de Usuario</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                      </button>
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="profileModalLabel">Perfil de Usuario</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <p>Nombre de usuario: {{ user.username }}</p>
+                                            <p>Email: {{ user.email }}</p>
+
+
+               
+
+
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Cerrar</button>
+                                        </div>
                                     </div>
-                                    <div class="modal-body">
-                                      <p>Nombre de usuario: {{ user.username }}</p>
-                                      <p>Email: {{ user.email }}</p>
-                                      <!-- Agrega aquí los campos adicionales del perfil que deseas mostrar -->
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                    </div>
-                                  </div>
                                 </div>
-                              </div>
+                            </div>
 
 
-                            
+
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
@@ -193,7 +202,6 @@
                             <li><a href="#">Testimonials</a></li>
                         </ul>
                     </div>-->
-
 
 
                 </div>
