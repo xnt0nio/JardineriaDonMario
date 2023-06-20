@@ -30,7 +30,7 @@ body {
 
 #gradient {
   background: #000000;
-  background-image: linear-gradient(#ebffcd 20%, #d4ff94 20%, #c4fa73 40%, #c0ff61 40%, #c1ff64 60%, #b4ff44 60%, #b0fc40 80%, #a4ff1c 80%);
+  background-image: linear-gradient(#ebffcd 20%, #d4ff94 20%, #c4fa73 40%, #7fad39 100%, #c1ff64 60%, #b4ff44 60%, #b0fc40 80%, #a4ff1c 80%);
   margin: 0 auto;
   margin-top: 260px;
   margin-bottom: 420px; /* Ajusta el espacio hacia abajo aquí */
@@ -107,11 +107,11 @@ body {
   <p>Fecha de inicio: {{ fecha_inicio }}</p>
   <p>Fecha de término: {{ fecha_termino }}</p>
   <p>ㅤ</p>
-  <form method="post" action="{% url 'cancelar_suscripcion' %}">
+  <p>ㅤ</p>
+  <form method="post" action="{% url 'cancelar_suscripcion' %}" id="cancelarForm">
     {% csrf_token %}
     <input type="hidden" name="suscripcion_id" value="{{ suscripcion.id }}">
-    <button type="submit" class="btn btn-danger">Cancelar
-        suscripción</button>
+    <button type="button" class="btn btn-danger" onclick="confirmarEliminacion()">Cancelar suscripción</button>
   </form>
  
 </div>
@@ -157,11 +157,16 @@ body {
           </div>
           <div class="card-footer bg-white py-3">
 
+
+
+
             <form method="post">
               {% csrf_token %}
               {{ form.as_p }}
-              <button type="submit" class="btn btn-primary">Suscribirse</button>
+     
             </form>
+
+            <a><div id="btnPaypal"></div></a>
 
           </div>
         </div>
@@ -182,6 +187,106 @@ body {
 {% endblock %}
 
 {% block js %}
+<script>
+function confirmarEliminacion() {
+    Swal.fire({
+      title: 'Eliminar',
+      text: '¿Desea cancelar la suscripción?',
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Eliminar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        document.getElementById('cancelarForm').submit();
+      }
+    });
+  }
+</script>
 
+
+
+
+<script>
+
+
+
+  paypal.Button.render({
+    env: 'sandbox',
+    client: {
+      sandbox: 'AcJh5Q-9moAqbK1_ri8GBhkmOjloGpEXxlfb_IC6MCRGzUyrh5p5IyGqS9GPUhVg7UlO63FQiSeDm2uN',
+      production: 'demo_production_client_id'
+    },
+    locale: 'es_CL',
+    style: {
+      size: 'medium',
+      color: 'gold',
+      shape: 'rect'
+    },
+    commit: true,
+    payment: function (data, actions) {
+      return actions.payment.create({
+        transactions: [{
+          amount: {
+            total: '1', // Monto a pagar
+            currency: 'USD' 
+          }
+        }]
+      });
+    },
+    onAuthorize: function(data, actions) {
+  return actions.payment.execute().then(function() {
+    // Obtener los datos del formulario
+    var formData = $('form').serialize();
+
+    // Enviar los datos a la vista de Django utilizando AJAX
+    $.ajax({
+      url: '/suscripcion/',  // Reemplaza '/guardar_datos/' con la URL de tu vista Django que guarda los datos
+      type: 'POST',
+      data: formData,
+      success: function(response) {
+        Swal.fire({
+          title: 'Transacción',
+          text: 'Pago realizado correctamente!',
+          icon: 'success',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Aceptar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "/suscripcion/";
+          }
+        });
+      },
+      error: function() {
+        Swal.fire({
+          title: 'Error Transacción',
+          text: 'Ha ocurrido un error en el pago!',
+          icon: 'error',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Aceptar'
+        });
+      }
+    });
+  });
+},
+    onCancel: function(data) {
+      Swal.fire({
+        title: 'Transacción Cancelada',
+        text: 'El pago ha sido cancelado!',
+        icon: 'error',
+        showCancelButton: false,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+      });
+    },
+ 
+  }, '#btnPaypal');
+</script>
 
 {% endblock %}

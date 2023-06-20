@@ -365,8 +365,8 @@ def suscripcion(request):
 
     if suscripcion:
         suscrito = True
-        fecha_inicio = suscripcion.fecha_inicio
-        fecha_termino = suscripcion.fecha_finalizacion
+        fecha_inicio = suscripcion.fecha_inicio.strftime('%m/%d')
+        fecha_termino = suscripcion.fecha_finalizacion.strftime('%m/%d')
     else:
         suscrito = False
         fecha_inicio = None
@@ -387,6 +387,8 @@ def suscripcion(request):
         form = SuscripcionForm()
 
     return render(request, 'core/suscripcion.html', {'form': form, 'suscrito': suscrito, 'fecha_inicio': fecha_inicio, 'fecha_termino': fecha_termino})
+
+
 
 @login_required
 def cancelar_suscripcion(request):
