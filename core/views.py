@@ -10,6 +10,7 @@ import requests
 from django.contrib.auth import authenticate, login
 from datetime import timedelta
 from django.utils import timezone
+from django.contrib.auth.models import Group
 
 
 
@@ -262,15 +263,23 @@ def shopdetails(request, id):
     if request.method == 'POST':
         carrito, created = Carrito.objects.get_or_create(producto=producto)
         cantidad_agregada = int(request.POST.get('cantidad_agregada', 1))
-        if not created:
-            carrito.cantidad_agregada += cantidad_agregada
+
+        # Verificar si hay suficiente stock disponible
+        if producto.stock >= cantidad_agregada:
+            # Restar la cantidad del carrito al stock del producto
+            producto.stock -= cantidad_agregada
+            producto.save()
+
+            if not created:
+                carrito.cantidad_agregada += cantidad_agregada
+            else:
+                carrito.cantidad_agregada = cantidad_agregada
+            carrito.save()
+            messages.success(request, "Producto almacenado correctamente")
         else:
-            carrito.cantidad_agregada = cantidad_agregada
-        carrito.save()
-        messages.success(request, "Producto almacenado correctamente")
+            messages.error(request, "No hay suficiente stock disponible")
 
     return render(request, 'core/shop-details.html', data)
-
   
 
 def main(request):
@@ -294,11 +303,40 @@ def shopingcart(request):
     return render(request, 'core/shoping-cart.html', datos)
 
 
+def registro(request):
+    data = {
+        'form': CustomUserCreationForm()
+    }
+    if request.method == 'POST':
+        formulario = CustomUserCreationForm(data=request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            user = authenticate(username=formulario.cleaned_data["username"], password=formulario.cleaned_data["password1"])
+            grupo = Group.objects.get(name="Cliente")
+            user.groups.add(grupo)
+            login(request, user)
+            messages.success(request, "Te has registrado correctamente")
+            #redirigir al home
+            return redirect(to="index")
+        data["form"] = formulario
+    return render(request, 'registration/registro.html',data)
+
+
 
 def eliminar_producto(request, id):
     carro = Carrito.objects.get(id=id)
+    producto = carro.producto
+
+    # Sumar la cantidad del carrito al stock del producto
+    producto.stock += carro.cantidad_agregada
+    producto.save()
+
     carro.delete()
     return redirect("shopingcart")
+
+
+
+
     
 def registro(request):
     data = {
@@ -325,11 +363,14 @@ def suscripcion(request):
     user = request.user
     suscripcion = Suscripcion.objects.filter(usuario=user).first()
 
-    if suscripcion:      
+    if suscripcion:
         suscrito = True
+        fecha_inicio = suscripcion.fecha_inicio
+        fecha_termino = suscripcion.fecha_finalizacion
     else:
-      
         suscrito = False
+        fecha_inicio = None
+        fecha_termino = None
 
     if request.method == 'POST':
         form = SuscripcionForm(request.POST)
@@ -339,13 +380,13 @@ def suscripcion(request):
             suscripcion.fecha_inicio = timezone.now()
             suscripcion.fecha_finalizacion = suscripcion.fecha_inicio + timedelta(days=30)
             suscripcion.save()
+
             messages.success(request, '¡Te has suscrito correctamente!')
             return redirect('index')
     else:
         form = SuscripcionForm()
 
-    return render(request, 'core/suscripcion.html', {'form': form, 'suscrito': suscrito})
-
+    return render(request, 'core/suscripcion.html', {'form': form, 'suscrito': suscrito, 'fecha_inicio': fecha_inicio, 'fecha_termino': fecha_termino})
 
 @login_required
 def cancelar_suscripcion(request):

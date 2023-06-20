@@ -30,69 +30,66 @@ body {
 
 #gradient {
   background: #000000;
-  background-image: linear-gradient(#DAB046 20%, #D73B25 20%, #D73B25 40%, #C71B25 40%, #C71B25 60%, #961A39 60%, #961A39 80%, #601035 80%);
+  background-image: linear-gradient(#ebffcd 20%, #d4ff94 20%, #c4fa73 40%, #c0ff61 40%, #c1ff64 60%, #b4ff44 60%, #b0fc40 80%, #a4ff1c 80%);
   margin: 0 auto;
-  margin-top: 514px;
+  margin-top: 260px;
+  margin-bottom: 420px; /* Ajusta el espacio hacia abajo aquí */
   width: 100%;
-  height: 150px;
+  height: calc(170px - 20px); /* Ajusta la altura aquí */
 }
 
 #gradient:after {
   content: "";
   position: absolute;
-  background: #00ff40;
+  background: #7fad39;
   left: 50%;
-  margin-top: -450px;
-  margin-left: -270px;
+  margin-top: -125px;
+  margin-left: -350px;
   padding-left: 20px;
   border-radius: 5px;
-  width: 520px;
-  height: 275px;
+  width: 700px;
+  height: 390px;
   z-index: -1;
 }
 
 #card {
   position: absolute;
-  width: 450px;
-  height: 225px;
+  width: 600px;
+  height: 330px;
   padding: 25px;
   padding-top: 0;
   padding-bottom: 0;
   left: 51%;
-  top: 240px;
-  margin-left: -250px;
-  background: #E9E2D0;
+  top: 315px;
+  margin-left: -315px;
+  background: #ffffff;
   box-shadow: -20px 0 35px -25px black, 20px 0 35px -25px black;
   z-index: 5;
 }
 
-#card img {
-  width: 150px;
-  float: left;
-  border-radius: 5px;
-  margin-right: 20px;
-  -webkit-filter: sepia(1);
-  -moz-filter: sepia(1);
-  filter: sepia(1);
-}
+
 
 #card h2 {
   font-family: courier;
   color: #333;
   margin: 0 auto;
   padding: 0;
-  font-size: 15pt;
+  font-size: 26pt;
 }
 
 #card p {
   font-family: courier;
-  color: #555;
-  font-size: 13px;
+  color: #000000;
+  font-size: 25px;
 }
 
 #card span {
   font-family: courier;
 }
+
+
+
+
 </style>
 {% endblock %}
 
@@ -104,18 +101,19 @@ body {
 <div id="gradient"></div>
 <div id="card">
   
-  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/43604/profile/profile-512_1.jpg"/>
-  <h2>Ondřej Page Bárta</h2>
-  <p>Student of IT in Czech republic.</p>
-  <p>Interested in Web technologies like HTML5, CSS3, JavaScript, PHP, MySQL, etc.</p>
-  <p>Love Codepen.io and respect Chris Coyier. ;)</p>
+  
+  <h2>Tú suscripcion</h2>
+  <p>ㅤ</p>
+  <p>Fecha de inicio: {{ fecha_inicio }}</p>
+  <p>Fecha de término: {{ fecha_termino }}</p>
+  <p>ㅤ</p>
   <form method="post" action="{% url 'cancelar_suscripcion' %}">
     {% csrf_token %}
     <input type="hidden" name="suscripcion_id" value="{{ suscripcion.id }}">
     <button type="submit" class="btn btn-danger">Cancelar
         suscripción</button>
   </form>
-  <span class="right bottom">adress: Czech Republic</span>
+ 
 </div>
 
 {% else %}
