@@ -75,7 +75,7 @@
                                             <p>Email: {{ user.email }}</p>
 
 
-               
+
 
 
 
@@ -132,11 +132,17 @@
                             {% if user.is_authenticated and user.username == 'admin' %}
                             <li><a href="{% url 'add' %}">Añadir producto</a></li>
                             {% elif user.is_authenticated and user.username != 'admin' %}
-                            <li><a href="{% url 'seguimiento' %}">Sigue tu pedido</a></li>
-                            <li><a href="{% url 'suscripcion' %}">Suscribete</a></li>
+                            <li><a href="{% url 'seguimiento' %}"> tu pedido</a></li>
+                     
+                            <li><a href="{% url 'suscripcion' %}">suscripción</a></li>
+                         
+
                             {% else %}
                             <li><a href="{% url 'crear' %}">Crear cuenta</a></li>
                             {% endif %}
+
+
+         
                         </ul>
                     </nav>
                 </div>

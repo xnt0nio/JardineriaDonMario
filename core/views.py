@@ -134,6 +134,8 @@ def pago(request):
 
     return render(request, 'core/pago.html')
 
+
+
 def vaciar_carrito(request):
     productos_carrito = Carrito.objects.filter()
 
@@ -151,22 +153,53 @@ def vaciar_carrito(request):
 
     return redirect('index')  # Redireccionar a la página de inicio después de vaciar el carrito
  
+from decimal import Decimal
+
+
+
 
 
 def checkout(request):
     carrito = Carrito.objects.all()
     respuesta2 = requests.get('https://mindicador.cl/api/dolar').json()
     valor_usd = respuesta2['serie'][0]['valor']
-    total_precio = sum(item.producto.precio * item.cantidad_agregada for item in carrito)
-    total_precio = round(total_precio/valor_usd,2)
+    total_precio = Decimal(str(sum(item.producto.precio * item.cantidad_agregada for item in carrito)))
+    total_en_dolar = round(total_precio / Decimal(str(valor_usd)), 2)
+
+    # Definir valores predeterminados para descuento y total_dolares
+    descuento = Decimal('0.0')
+    total_con_descuento = total_precio
+    total_dolares = Decimal('0.0')
+
+    # Verificar si el usuario está suscrito
+    if hasattr(request.user, 'suscripcion'):
+        descuento_porcentaje = Decimal('0.1')  # 10% de descuento para usuarios suscritos
+        descuento = round(total_precio * descuento_porcentaje)
+        total_con_descuento = round(total_precio - descuento)
+        total_dolares = round(total_con_descuento / Decimal(str(valor_usd)), 2)
+
+    total = total_dolares or total_en_dolar
+
     for item in carrito:
         item.total_producto = item.producto.precio * item.cantidad_agregada
 
-    datos = { 
-        'listarproductos': carrito, 
-        'total_precio' : total_precio
+    datos = {
+        'listarproductos': carrito,
+        'total_precio': total_precio,
+        'descuento': descuento,
+        'total_con_descuento': total_con_descuento,
+        'total_dolares': total_dolares,
+        'total_en_dolar': total_en_dolar,
+        'total': total,
+        'suscrito': hasattr(request.user, 'suscripcion')
     }
     return render(request, 'core/checkout.html', datos)
+
+
+
+
+
+
 
 @login_required
 def seguimiento(request):

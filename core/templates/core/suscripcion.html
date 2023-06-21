@@ -152,22 +152,14 @@ body {
               <li class="list-group-item">suscripción </li>
               <li class="list-group-item">Premium</li>
               <li class="list-group-item">duración: 2 meses</li>
-
             </ul>
           </div>
           <div class="card-footer bg-white py-3">
-
-
-
-
             <form method="post">
               {% csrf_token %}
-              {{ form.as_p }}
-     
+              {{ form.as_p }}    
             </form>
-
             <a><div id="btnPaypal"></div></a>
-
           </div>
         </div>
       </div>
