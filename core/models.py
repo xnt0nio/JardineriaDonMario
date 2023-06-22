@@ -28,6 +28,7 @@ class Producto(models.Model):
         return self.nombre
 
 class Carrito(models.Model):
+    
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad_agregada = models.IntegerField(default=0)
 

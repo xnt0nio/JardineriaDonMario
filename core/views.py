@@ -218,18 +218,8 @@ def seguimiento(request):
     return render(request, 'core/seguimiento.html', datos)
 
 
-"""def seguimiento(request):
-    seguimientos = Seguimiento.objects.all()
-    seguimientos.delete()  # Elimina todos los objetos de la lista
-
-    total_precio = 0
-
-    datos = {
-        'seguimientos': [],
-        'total_precio': total_precio
-    }
-
-    return render(request, 'core/seguimiento.html', datos)"""
+def seguimiento(request):
+    return render(request, 'core/seguimiento.html')
 
 
 def crear(request):
