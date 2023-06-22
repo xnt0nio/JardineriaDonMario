@@ -1,0 +1,278 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+<style>
+
+
+body {
+  margin: -432 auto;
+  padding: 56;
+  background: #ffffff;
+
+}
+
+.left {
+  left: 25px;
+}
+
+.right {
+  right: 25px;
+}
+
+.center {
+  text-align: center;
+}
+
+.bottom {
+  position: absolute;
+  bottom: 25px;
+}
+
+#gradient {
+  background: #000000;
+  background-image: linear-gradient(#ebffcd 20%, #d4ff94 20%, #c4fa73 40%, #7fad39 100%, #c1ff64 60%, #b4ff44 60%, #b0fc40 80%, #a4ff1c 80%);
+  margin: 0 auto;
+  margin-top: 260px;
+  margin-bottom: 420px; /* Ajusta el espacio hacia abajo aquí */
+  width: 100%;
+  height: calc(170px - 20px); /* Ajusta la altura aquí */
+}
+
+#gradient:after {
+  content: "";
+  position: absolute;
+  background: #7fad39;
+  left: 50%;
+  margin-top: -125px;
+  margin-left: -350px;
+  padding-left: 20px;
+  border-radius: 5px;
+  width: 700px;
+  height: 390px;
+  z-index: -1;
+}
+
+#card {
+  position: absolute;
+  width: 600px;
+  height: 330px;
+  padding: 25px;
+  padding-top: 0;
+  padding-bottom: 0;
+  left: 51%;
+  top: 315px;
+  margin-left: -315px;
+  background: #ffffff;
+  box-shadow: -20px 0 35px -25px black, 20px 0 35px -25px black;
+  z-index: 5;
+}
+
+
+
+#card h2 {
+  font-family: courier;
+  color: #333;
+  margin: 0 auto;
+  padding: 0;
+  font-size: 26pt;
+}
+
+#card p {
+  font-family: courier;
+  color: #000000;
+  font-size: 25px;
+}
+
+#card span {
+  font-family: courier;
+}
+
+
+
+
+</style>
+{% endblock %}
+
+
+{% block contenido %}
+
+{% if suscrito  %}
+  <hr class="my-4">
+<div id="gradient"></div>
+<div id="card">
+  
+  
+  <h2>Tú suscripcion</h2>
+  <p>ㅤ</p>
+  <p>Fecha de inicio: {{ fecha_inicio }}</p>
+  <p>Fecha de término: {{ fecha_termino }}</p>
+  <p>ㅤ</p>
+  <p>ㅤ</p>
+  <form method="post" action="{% url 'cancelar_suscripcion' %}" id="cancelarForm">
+    {% csrf_token %}
+    <input type="hidden" name="suscripcion_id" value="{{ suscripcion.id }}">
+    <button type="button" class="btn btn-danger" onclick="confirmarEliminacion()">Cancelar suscripción</button>
+  </form>
+ 
+</div>
+
+{% else %}
+
+
+
+<div class="container">
+  <!--Section: Content-->
+  <section class="text-center">
+    <h4 class="mb-4"><strong>Suscribete</strong></h4>
+
+
+    <hr class="my-4">
+
+    <div class="row gx-lg-5">
+
+      <!--Grid column-->
+
+
+      <!--Grid column-->
+      <div class="col-lg-3 col-md-6 mb-4">
+        <!-- Card -->
+        <div class="card">
+          <div class="card-header bg-white py-3">
+            <p class="text-uppercase small mb-2"><strong>Premium</strong></p>
+            <h5 class="mb-0">$1.00</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">suscripción </li>
+              <li class="list-group-item">Premium</li>
+              <li class="list-group-item">duración: 2 meses</li>
+            </ul>
+          </div>
+          <div class="card-footer bg-white py-3">
+            <form method="post">
+              {% csrf_token %}
+              {{ form.as_p }}    
+            </form>
+            <a><div id="btnPaypal"></div></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="my-4">
+  </section>
+</div>
+
+{% endif %}
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+function confirmarEliminacion() {
+    Swal.fire({
+      title: 'Eliminar',
+      text: '¿Desea cancelar la suscripción?',
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Eliminar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        document.getElementById('cancelarForm').submit();
+      }
+    });
+  }
+</script>
+
+
+
+
+<script>
+
+
+
+  paypal.Button.render({
+    env: 'sandbox',
+    client: {
+      sandbox: 'AcJh5Q-9moAqbK1_ri8GBhkmOjloGpEXxlfb_IC6MCRGzUyrh5p5IyGqS9GPUhVg7UlO63FQiSeDm2uN',
+      production: 'demo_production_client_id'
+    },
+    locale: 'es_CL',
+    style: {
+      size: 'medium',
+      color: 'gold',
+      shape: 'rect'
+    },
+    commit: true,
+    payment: function (data, actions) {
+      return actions.payment.create({
+        transactions: [{
+          amount: {
+            total: '1', // Monto a pagar
+            currency: 'USD' 
+          }
+        }]
+      });
+    },
+    onAuthorize: function(data, actions) {
+  return actions.payment.execute().then(function() {
+    // Obtener los datos del formulario
+    var formData = $('form').serialize();
+
+    // Enviar los datos a la vista de Django utilizando AJAX
+    $.ajax({
+      url: '/suscripcion/',  // Reemplaza '/guardar_datos/' con la URL de tu vista Django que guarda los datos
+      type: 'POST',
+      data: formData,
+      success: function(response) {
+        Swal.fire({
+          title: 'Transacción',
+          text: 'Pago realizado correctamente!',
+          icon: 'success',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Aceptar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "/suscripcion/";
+          }
+        });
+      },
+      error: function() {
+        Swal.fire({
+          title: 'Error Transacción',
+          text: 'Ha ocurrido un error en el pago!',
+          icon: 'error',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Aceptar'
+        });
+      }
+    });
+  });
+},
+    onCancel: function(data) {
+      Swal.fire({
+        title: 'Transacción Cancelada',
+        text: 'El pago ha sido cancelado!',
+        icon: 'error',
+        showCancelButton: false,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar'
+      });
+    },
+ 
+  }, '#btnPaypal');
+</script>
+
+{% endblock %}

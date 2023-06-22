@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock %}
+{% block contenido %}
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#profileModal">
+  Ver perfil
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="profileModalLabel">Perfil de Usuario</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Nombre de usuario: {{ user.username }}</p>
+        <p>Email: {{ user.email }}</p>
+¿
+        <!-- Agrega aquí los campos adicionales del perfil que deseas mostrar -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
