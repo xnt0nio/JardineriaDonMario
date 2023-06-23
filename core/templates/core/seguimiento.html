@@ -1,0 +1,327 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+<style>
+    body {
+        color: #000;
+        overflow-x: hidden;
+        height: 100%;
+        background-color: #ffffff;
+        background-repeat: no-repeat;
+    }
+
+    .card {
+        z-index: 0;
+        background-color: #ECEFF1;
+        padding-bottom: 20px;
+        margin-top: 90px;
+        margin-bottom: 90px;
+        border-radius: 10px;
+    }
+
+    .top {
+        padding-top: 40px;
+        padding-left: 13% !important;
+        padding-right: 13% !important;
+    }
+
+    /*Icon progressbar*/
+    #progressbar {
+        margin-bottom: 30px;
+        overflow: hidden;
+        color: #455A64;
+        padding-left: 0px;
+        margin-top: 30px;
+    }
+
+    #progressbar li {
+        list-style-type: none;
+        font-size: 13px;
+        width: 25%;
+        float: left;
+        position: relative;
+        font-weight: 400;
+    }
+
+    #progressbar .step0:before {
+        font-family: FontAwesome;
+        content: "\f10c";
+        color: #fff;
+    }
+
+    #progressbar li:before {
+        width: 40px;
+        height: 40px;
+        line-height: 45px;
+        display: block;
+        font-size: 20px;
+        background: #C5CAE9;
+        border-radius: 50%;
+        margin: auto;
+        padding: 0px;
+    }
+
+    /*ProgressBar connectors*/
+    #progressbar li:after {
+        content: '';
+        width: 100%;
+        height: 12px;
+        background: #C5CAE9;
+        position: absolute;
+        left: 0;
+        top: 16px;
+        z-index: -1;
+    }
+
+    #progressbar li:last-child:after {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        position: absolute;
+        left: -50%;
+    }
+
+    #progressbar li:nth-child(2):after,
+    #progressbar li:nth-child(3):after {
+        left: -50%;
+    }
+
+    #progressbar li:first-child:after {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        position: absolute;
+        left: 50%;
+    }
+
+    #progressbar li:last-child:after {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    #progressbar li:first-child:after {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+
+    /*Color number of the step and the connector before it*/
+    #progressbar li.active:before,
+    #progressbar li.active:after {
+        background: #651FFF;
+    }
+
+    #progressbar li.active:before {
+        font-family: FontAwesome;
+        content: "\f00c";
+    }
+
+    .icon {
+        width: 60px;
+        height: 60px;
+        margin-right: 15px;
+    }
+
+    .icon-content {
+        padding-bottom: 20px;
+    }
+
+    @media screen and (max-width: 992px) {
+        .icon-content {
+            width: 50%;
+        }
+    }
+</style>
+{% endblock %}
+{% block contenido %}
+<link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
+
+
+    <hr class="my-4">  
+<div class="container padding-bottom-3x mb-1">
+    {% for pedido in pedidos %}
+    <div class="container px-1 px-md-4 py-5 mx-auto">
+        <div class="card">
+            <div class="row d-flex justify-content-between px-3 top">
+                <div class="d-flex">
+                    <h5>pedido: <span class="text-primary font-weight-bold">{{ pedido.producto.nombre }}</span></h5>
+                </div>
+                <div class="d-flex flex-column text-sm-right">
+                    <p class="mb-0">fecha de entrega: <span>{{ pedido.fecha_entrega }}</span></p>
+                    <p>estado: <span class="font-weight-bold">{{ pedido.estado }}</span></p>
+                </div>
+            </div>
+            <!-- Add class 'active' to progress -->
+
+            {% if pedido.estado == 'validacion' %}
+            <div class="row d-flex justify-content-center">
+                <div class="col-12">
+                    <ul id="progressbar" class="text-center">
+                        <li class="active step0"></li>
+                        <li class="step0"></li>
+                        <li class="step0"></li>
+                        <li class="step0"></li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if pedido.estado == 'preparacion' %}
+            <div class="row d-flex justify-content-center">
+                <div class="col-12">
+                    <ul id="progressbar" class="text-center">
+                        <li class="active step0"></li>
+                        <li class="active step0"></li>
+                        <li class="step0"></li>
+                        <li class="step0"></li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if pedido.estado == 'reparto' %}
+            <div class="row d-flex justify-content-center">
+                <div class="col-12">
+                    <ul id="progressbar" class="text-center">
+                        <li class="active step0"></li>
+                        <li class="active step0"></li>
+                        <li class="active step0"></li>
+                        <li class="step0"></li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if pedido.estado == 'entregado' %}
+            <div class="row d-flex justify-content-center">
+                <div class="col-12">
+                    <ul id="progressbar" class="text-center">
+                        <li class="active step0"></li>
+                        <li class="active step0"></li>
+                        <li class="active step0"></li>
+                        <li class="active step0"></li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+
+
+            <div class="row justify-content-between top">
+                <div class="row d-flex icon-content">
+                    <img class="icon" src="https://i.imgur.com/9nnc9Et.png">
+                    <div class="d-flex flex-column">
+                        <p class="font-weight-bold">estado: <br>Validación</p>
+                    </div>
+                </div>
+                <div class="row d-flex icon-content">
+                    <img class="icon" src="https://i.imgur.com/u1AzR7w.png">
+                    <div class="d-flex flex-column">
+                        <p class="font-weight-bold">estado: <br>Preparación</p>
+                    </div>
+                </div>
+                <div class="row d-flex icon-content">
+                    <img class="icon" src="https://i.imgur.com/TkPm63y.png">
+                    <div class="d-flex flex-column">
+                        <p class="font-weight-bold">estado: <br>Reparto</p>
+                    </div>
+                </div>
+                <div class="row d-flex icon-content">
+                    <img class="icon" src="https://i.imgur.com/HdsziHP.png">
+                    <div class="d-flex flex-column">
+                        <p class="font-weight-bold">estado: <br>Entregado</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+
+
+    <div class="ant-col br-10 box-shadow-1 plr-auto-xs mb-20 ant-col-xs-24 ant-col-md-24 ant-col-lg-24 ant-col-xl-24"
+        style="background: rgb(255, 255, 255); border: 1px solid rgb(218, 218, 218); min-height: 5em;">
+        {% for pedido in pedidos %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Detalles de envío</th>
+          
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Entrega En</th>
+                    <td>{{ pedido.comuna }}/{{ pedido.direccion }}/{{ pedido.nro_casa_departamento }}</td>
+                    <th scope="row">Destinatario</th>
+                    <td>{{ pedido.nombre_completo}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Origen</th>
+                    <td>{{ pedido.region }}</td>
+                    <th scope="row">Destino</th>
+                    <td>{{ pedido.region }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Celular</th>
+                    <td>{{ pedido.celular }}</td>
+                    <th scope="row">Correo</th>
+                    <td>{{ pedido.correo }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Cantidad</th>
+                    <td>{{ pedido.cantidad }}</td>
+                    <th scope="row">Fecha aprox entrega</th>
+                    <td>{{ pedido.fecha_entrega }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Tu comentario</th>
+                    <td>{{ pedido.comentario }}</td>
+                    <th scope="row">ㅤ</th>
+                    <td>ㅤ</td>
+                  
+                </tr>
+
+            </tbody>
+        </table>
+        
+        {% endfor %}
+    </div>
+
+
+ 
+
+
+</div>
+
+<hr class="my-4">
+
+
+<h1>Cambiar Estado del Pedido</h1>
+
+{% for pedido in pedidos %}
+  <h1>Pedido #{{ pedido.pk }} - {{ pedido.usuario.username }}</h1>
+
+  <form method="POST" action="{% url 'cambiar_estado_pedido' pedido.pk %}">
+    {% csrf_token %}
+    <label for="nuevo_estado">Nuevo Estado:</label>
+    <select name="nuevo_estado" id="nuevo_estado">
+      <option value="validacion" {% if pedido.estado == 'validacion' %}selected{% endif %}>Validación</option>
+      <option value="preparacion" {% if pedido.estado == 'preparacion' %}selected{% endif %}>Preparación</option>
+      <option value="reparto" {% if pedido.estado == 'reparto' %}selected{% endif %}>Reparto</option>
+      <option value="entregado" {% if pedido.estado == 'entregado' %}selected{% endif %}>Entregado</option>
+    </select>
+    <br>
+    <input type="submit" value="Guardar">
+  </form>
+{% endfor %}
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

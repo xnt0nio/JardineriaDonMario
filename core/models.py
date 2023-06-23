@@ -1,7 +1,7 @@
 from django.db import models
 from datetime import date
 from django.contrib.auth.models import User
-from datetime import timedelta
+
 
 # Create your models here.
 
@@ -50,3 +50,29 @@ class Suscripcion(models.Model):
 
     def __str__(self):
         return self.usuario.username
+    
+
+class Pedido(models.Model):
+    ESTADO_CHOICES = (
+        ('validacion', 'Validación'),
+        ('preparacion', 'Preparación'),
+        ('reparto', 'Reparto'),
+        ('entregado', 'Entregado'),
+    )
+
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE, null=True)
+    fecha_entrega = models.DateField(null=True)
+    nombre_completo = models.CharField(max_length=100, blank=True)
+    cantidad = models.IntegerField(default=0, null=True)
+    region = models.CharField(max_length=100, blank=True)
+    comuna = models.CharField(max_length=100, blank=True)
+    direccion = models.CharField(max_length=200, blank=True)
+    nro_casa_departamento = models.CharField(max_length=50, blank=True)
+    celular = models.CharField(max_length=100, blank=True)
+    correo = models.CharField(max_length=100, blank=True)
+    comentario = models.TextField(blank=True)
+    estado = models.CharField(max_length=50, choices=ESTADO_CHOICES, default='validacion')
+
+    def str(self):
+        return f"Pedido #{self.pk} - {self.usuario.username}"    

@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render, redirect
 from .models import *
 from .forms import *
@@ -11,6 +12,7 @@ from django.contrib.auth import authenticate, login
 from datetime import timedelta
 from django.utils import timezone
 from django.contrib.auth.models import Group
+from datetime import datetime
 
 
 
@@ -150,47 +152,118 @@ from decimal import Decimal
 
 
 
+
+
 def checkout(request):
-    carrito = Carrito.objects.all()
-    respuesta2 = requests.get('https://mindicador.cl/api/dolar').json()
-    valor_usd = respuesta2['serie'][0]['valor']
-    total_precio = Decimal(str(sum(item.producto.precio * item.cantidad_agregada for item in carrito)))
-    total_en_dolar = round(total_precio / Decimal(str(valor_usd)), 2)
+    if request.method == 'POST':
+        carrito = Carrito.objects.all()
+        respuesta2 = requests.get('https://mindicador.cl/api/dolar').json()
+        valor_usd = respuesta2['serie'][0]['valor']
+        total_precio = Decimal(str(sum(item.producto.precio * item.cantidad_agregada for item in carrito)))
+        total_en_dolar = round(total_precio / Decimal(str(valor_usd)), 2)
 
-    # Definir valores predeterminados para descuento y total_dolares
-    descuento = Decimal('0.0')
-    total_con_descuento = total_precio
-    total_dolares = Decimal('0.0')
+        # Definir valores predeterminados para descuento y total_dolares
+        descuento = Decimal('0.0')
+        total_con_descuento = total_precio
+        total_dolares = Decimal('0.0')
 
-    # Verificar si el usuario está suscrito
-    if hasattr(request.user, 'suscripcion'):
-        descuento_porcentaje = Decimal('0.1')  # 10% de descuento para usuarios suscritos
-        descuento = round(total_precio * descuento_porcentaje)
-        total_con_descuento = round(total_precio - descuento)
-        total_dolares = round(total_con_descuento / Decimal(str(valor_usd)), 2)
+        # Verificar si el usuario está suscrito
+        if hasattr(request.user, 'suscripcion'):
+            descuento_porcentaje = Decimal('0.1')  # 10% de descuento para usuarios suscritos
+            descuento = round(total_precio * descuento_porcentaje)
+            total_con_descuento = round(total_precio - descuento)
+            total_dolares = round(total_con_descuento / Decimal(str(valor_usd)), 2)
 
-    total = total_dolares or total_en_dolar
+        total = total_dolares or total_en_dolar
 
-    for item in carrito:
-        item.total_producto = item.producto.precio * item.cantidad_agregada
-        HistorialCompra.objects.create(
+        fecha_entrega = datetime.now().date() + timedelta(days=5)
+        fecha_compra =  datetime.today()
+        for item in carrito:
+            item.total_producto = item.producto.precio * item.cantidad_agregada
+            item.save()  # Guardar los cambios en el modelo Carrito
+
+            HistorialCompra.objects.create(
+                usuario=request.user,
+                producto=item.producto,
+                cantidad=item.cantidad_agregada,
+                fecha_compra=fecha_compra
+            )
+
+        nombre_completo = request.POST.get('nombre_completo')
+        region = request.POST.get('region')
+        comuna = request.POST.get('comuna')
+        direccion = request.POST.get('direccion')
+        nro_casa_departamento = request.POST.get('nro_casa_departamento')
+        celular = request.POST.get('celular')
+        correo = request.POST.get('correo')
+        comentario = request.POST.get('comentario')
+
+        Pedido.objects.create(
             usuario=request.user,
             producto=item.producto,
             cantidad=item.cantidad_agregada,
-            fecha_compra=timezone.now()
+            nombre_completo=nombre_completo,
+            region=region,
+            comuna=comuna,
+            direccion=direccion,
+            nro_casa_departamento=nro_casa_departamento,
+            celular=celular,
+            correo=correo,
+            comentario=comentario,
+            fecha_entrega=fecha_entrega
         )
 
-    datos = {
-        'listarproductos': carrito,
-        'total_precio': total_precio,
-        'descuento': descuento,
-        'total_con_descuento': total_con_descuento,
-        'total_dolares': total_dolares,
-        'total_en_dolar': total_en_dolar,
-        'total': total,
-        'suscrito': hasattr(request.user, 'suscripcion')
-    }
-    return render(request, 'core/checkout.html', datos)
+        datos = {
+            'listarproductos': carrito,
+            'total_precio': total_precio,
+            'descuento': descuento,
+            'total_con_descuento': total_con_descuento,
+            'total_dolares': total_dolares,
+            'total_en_dolar': total_en_dolar,
+            'total': total,
+            'suscrito': hasattr(request.user, 'suscripcion')
+        }
+        return render(request, 'core/checkout.html', datos)
+
+    else:
+        # Código para la solicitud GET (cuando se carga la página)
+        carrito = Carrito.objects.all()
+        total_precio = Decimal('0')
+        
+        for item in carrito:
+            item.total_producto = item.producto.precio * item.cantidad_agregada
+            total_precio += item.total_producto
+        
+        respuesta2 = requests.get('https://mindicador.cl/api/dolar').json()
+        valor_usd = respuesta2['serie'][0]['valor']
+        total_en_dolar = round(total_precio / Decimal(str(valor_usd)), 2)
+
+        descuento = Decimal('0.0')
+        total_con_descuento = total_precio
+        total_dolares = Decimal('0.0')
+
+        if hasattr(request.user, 'suscripcion'):
+            descuento_porcentaje = Decimal('0.1')
+            descuento = round(total_precio * descuento_porcentaje)
+            total_con_descuento = round(total_precio - descuento)
+            total_dolares = round(total_con_descuento / Decimal(str(valor_usd)), 2)
+
+        total = total_dolares or total_en_dolar
+
+        datos = {
+            'listarproductos': carrito,
+            'total_precio': total_precio,
+            'descuento': descuento,
+            'total_con_descuento': total_con_descuento,
+            'total_dolares': total_dolares,
+            'total_en_dolar': total_en_dolar,
+            'total': total,
+            'suscrito': hasattr(request.user, 'suscripcion')
+        }
+        return render(request, 'core/checkout.html', datos)
+
+
+
 
 
 
@@ -330,9 +403,18 @@ def shopingcart(request):
         item.total_producto = item.producto.precio * item.cantidad_agregada
         total_precio += item.total_producto
 
+    descuento = Decimal('0.0')
+    total_con_descuento = total_precio
+    if hasattr(request.user, 'suscripcion'):
+            descuento_porcentaje = Decimal('0.1')
+            descuento = round(total_precio * descuento_porcentaje)
+            total_con_descuento = round(total_precio - descuento)    
+
     datos = {
         'listarproductos': carrito,
-        'total_precio': total_precio
+        'total_precio': total_precio,
+        'descuento': descuento,
+        'total_con_descuento': total_con_descuento,
     }
 
     return render(request, 'core/shoping-cart.html', datos)
@@ -382,6 +464,8 @@ def registro(request):
         if formulario.is_valid():
             formulario.save()
             user = authenticate(username=formulario.cleaned_data["username"], password=formulario.cleaned_data["password1"])
+            grupo = Group.objects.get(name="Cliente")
+            user.groups.add(grupo)
             login(request, user)
             messages.success(request, "Te has registrado correctamente")
             #redirigir al home
@@ -431,6 +515,27 @@ def cancelar_suscripcion(request):
     suscripcion.delete()
     messages.success(request, '¡Tu suscripción ha sido cancelada correctamente!')
     return redirect('index')
+
+def seguimiento(request):
+    # Obtener todos los pedidos del usuario actual
+    pedidos = Pedido.objects.filter(usuario=request.user)
+
+    return render(request, 'core/seguimiento.html', {'pedidos': pedidos})
+
+
+def cambiar_estado_pedido(request, pedido_id):
+    # Obtener el pedido específico
+    pedido = Pedido.objects.get(pk=pedido_id)
+
+    if request.method == 'POST':
+        # Obtener el nuevo estado seleccionado
+        nuevo_estado = request.POST.get('nuevo_estado')
+
+        # Actualizar el estado del pedido
+        pedido.estado = nuevo_estado
+        pedido.save()
+        return redirect('seguimiento')
+    return render(request, 'core/seguimiento.html', {'pedido': pedido})
 
 
 

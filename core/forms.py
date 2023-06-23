@@ -58,6 +58,17 @@ class SuscripcionForm(forms.ModelForm):
         fields = []
 
 
+class PedidoForm(forms.ModelForm):
+    class Meta:
+        model = Pedido
+        fields = '__all__'
+
+    def clean_nombre_completo(self):
+        nombre_completo = self.cleaned_data.get('nombre_completo')
+        if not nombre_completo:
+            raise forms.ValidationError("El nombre completo es requerido.")
+        return nombre_completo
+
 
 
 

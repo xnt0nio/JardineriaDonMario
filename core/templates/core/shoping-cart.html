@@ -95,10 +95,16 @@
             </div>
             <div class="col-lg-6">
                 <div class="shoping__checkout">
+
                     <h5>Precio total</h5>
                     <ul>
+                        
+                        
                         <!-- <li>Subtotal <span>$454.98</span></li>-->
-                        <li>Total <span>{{ total_precio }}</span></li>
+                        
+                        <li>Total<span>{{ total_precio }}</span></li>
+                        <li>Descuento <span>{{ descuento }}</span></li>
+                        <li>SubTotal<span>{{ total_con_descuento }}</span></li>
                     </ul>
                     {% if listarproductos %}
                     {% if user.is_authenticated %}
